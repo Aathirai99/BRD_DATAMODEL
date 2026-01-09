@@ -1,0 +1,10 @@
+streamlit
+anthropic
+python-dotenv
+pypdf2
+python-docx
+pdfplumber
+pandas
+openpyxl
+xlrd
+requests

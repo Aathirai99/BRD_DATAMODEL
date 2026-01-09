@@ -1,0 +1,1074 @@
+{
+  "entities": [
+    {
+      "name": "Person",
+      "type": "BusinessEntity",
+      "description": "Constituent master record for USF - represents students, alumni, staff, faculty, and other constituents",
+      "fields": [
+        {
+          "name": "firstName",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Individual's first name",
+          "requirementIds": [
+            "FR-1",
+            "FR-10"
+          ],
+          "sourceRequirements": [
+            "FR-1: Solution shall have the ability to pull data that feeds six out of eleven current tableau reports referenced in the file: Eventually solution shall provide ability to eliminate the use of ODS. (The reports specified in the fie are generated from the source systems: workday, slate, sfaq, banner.)",
+            "FR-10: Solution shall replicate and eventually replace current Slate integration into ODS for reporting needs. (Slate - transactional+customer+Nmcustomer) with Snowflake/Azure pipeline. The integration from Slate as a system will not send any data to MDM. SEM - Admissions is the group that runs reports. Aspiration is to generate the reports from the MDM/Snowflake solution. Jun 11 2022: business runs reports from Banner at present. The integration at present loads data into Banner from slate. Slate constitient are not meant to go into MDM till they are accepted. Unique identifier are returned back to slate from banner post load into banner. Integration Loads at present are: (1) Student application information is being loaded from slate into ODS (2) P2P Integration between various systems Report extracts at present: (1) sfaq into Snowflake ingestion for reporting (to be reviewed during 0B/phase 1) Open questions: Why was the integration performed the way it was performed?is there a need to join slate and banner information. Proposed flow: prospect from slate --> mdm. Banner information --> mdm. MDM cross reference information sent to snowflake providing the relationship to generate reports. Use cases: 1 - New prospect in slate (s1) --> gets accepted --> loaded into banner (b1) --> unique id generated/loaded back into slate/sfaq/sf-stu --> mdm generated unique id (u1). --> alumni (w1). Snowflake record will be p1. U1 joins with banner, sfaq, workday in addition to the transactional data. The dimensional model will be including all these. Reporting examples: - # of registration vs acceptance by time, state, race"
+          ],
+          "fieldReasoning": {
+            "FR-1": "Requirement mentions concepts related to 'firstName': id",
+            "FR-10": "FR-10 describes loading 'Student application information' from Slate and managing 'prospect' and 'constituent' data. Person identification fields (firstName, lastName) are essential for: (1) Loading prospect/student data from Slate into MDM, (2) Supporting reporting needs (e.g., '# of registration vs acceptance'), and (3) Creating master records that can be cross-referenced across systems."
+          }
+        },
+        {
+          "name": "lastName",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Individual's last name",
+          "requirementIds": [
+            "FR-1",
+            "FR-10"
+          ],
+          "sourceRequirements": [
+            "FR-1: Solution shall have the ability to pull data that feeds six out of eleven current tableau reports referenced in the file: Eventually solution shall provide ability to eliminate the use of ODS. (The reports specified in the fie are generated from the source systems: workday, slate, sfaq, banner.)",
+            "FR-10: Solution shall replicate and eventually replace current Slate integration into ODS for reporting needs. (Slate - transactional+customer+Nmcustomer) with Snowflake/Azure pipeline. The integration from Slate as a system will not send any data to MDM. SEM - Admissions is the group that runs reports. Aspiration is to generate the reports from the MDM/Snowflake solution. Jun 11 2022: business runs reports from Banner at present. The integration at present loads data into Banner from slate. Slate constitient are not meant to go into MDM till they are accepted. Unique identifier are returned back to slate from banner post load into banner. Integration Loads at present are: (1) Student application information is being loaded from slate into ODS (2) P2P Integration between various systems Report extracts at present: (1) sfaq into Snowflake ingestion for reporting (to be reviewed during 0B/phase 1) Open questions: Why was the integration performed the way it was performed?is there a need to join slate and banner information. Proposed flow: prospect from slate --> mdm. Banner information --> mdm. MDM cross reference information sent to snowflake providing the relationship to generate reports. Use cases: 1 - New prospect in slate (s1) --> gets accepted --> loaded into banner (b1) --> unique id generated/loaded back into slate/sfaq/sf-stu --> mdm generated unique id (u1). --> alumni (w1). Snowflake record will be p1. U1 joins with banner, sfaq, workday in addition to the transactional data. The dimensional model will be including all these. Reporting examples: - # of registration vs acceptance by time, state, race"
+          ],
+          "fieldReasoning": {
+            "FR-1": "Requirement mentions concepts related to 'lastName': id",
+            "FR-10": "FR-10 describes loading 'Student application information' from Slate and managing 'prospect' and 'constituent' data. Person identification fields (firstName, lastName) are essential for: (1) Loading prospect/student data from Slate into MDM, (2) Supporting reporting needs (e.g., '# of registration vs acceptance'), and (3) Creating master records that can be cross-referenced across systems."
+          }
+        },
+        {
+          "name": "fullName",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Complete full name",
+          "requirementIds": [
+            "FR-1"
+          ],
+          "sourceRequirements": [
+            "FR-1: Solution shall have the ability to pull data that feeds six out of eleven current tableau reports referenced in the file: Eventually solution shall provide ability to eliminate the use of ODS. (The reports specified in the fie are generated from the source systems: workday, slate, sfaq, banner.)"
+          ],
+          "fieldReasoning": {
+            "FR-1": "Field 'fullName' supports the requirement's data model needs"
+          }
+        },
+        {
+          "name": "dateOfBirth",
+          "dataType": "DateField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Date of birth",
+          "requirementIds": [
+            "FR-1"
+          ],
+          "sourceRequirements": [
+            "FR-1: Solution shall have the ability to pull data that feeds six out of eleven current tableau reports referenced in the file: Eventually solution shall provide ability to eliminate the use of ODS. (The reports specified in the fie are generated from the source systems: workday, slate, sfaq, banner.)"
+          ],
+          "fieldReasoning": {
+            "FR-1": "Field 'dateOfBirth' supports the requirement's data model needs"
+          }
+        },
+        {
+          "name": "ssn",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Social Security Number",
+          "requirementIds": [
+            "FR-1"
+          ],
+          "sourceRequirements": [
+            "FR-1: Solution shall have the ability to pull data that feeds six out of eleven current tableau reports referenced in the file: Eventually solution shall provide ability to eliminate the use of ODS. (The reports specified in the fie are generated from the source systems: workday, slate, sfaq, banner.)"
+          ],
+          "fieldReasoning": {
+            "FR-1": "Field 'ssn' supports the requirement's data model needs"
+          }
+        },
+        {
+          "name": "addressLine1",
+          "dataType": "TextField",
+          "fieldGroup": "PostalAddress",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Street address line 1",
+          "requirementIds": [
+            "FR-3",
+            "FR-20",
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-3: Solution shall implement cost effective, centralized standardization approach that standardizes addresses to an uniform format. Solution will leverage USF standardized address being sent from source systems.",
+            "FR-20: Solution shall have the ability to uniquely identify addresses based on Reference 360 service crosswalk defined, the field values provided while associating the address to the constituent.",
+            "FR-21: While merging, MDM shall have ability to re-parent multiple unique child records of a constituent that are originating from the source systems as per active Constituent role/s. Ex: Constituent golden record CG1 has two unique emails. Constituent golden record CG2 has three unqiue emails. CG1 and CG2 are matching and gets merged. Merged golden record MCG12 will have only unique emails. The fields that determine uniqueness on Address, Phone and email will be identified during solutioning/design phase. 1:M Use case: Duplcates found among the un-consolidated constituent records loaded into MDM. While merging, records get re-parented. Sub use-cases: MDM merge: unique field in field group based, re-parenting de-duplication during the merge (in MDM, in pipeline) Reference 360 crosswalks can be leveraged in all the options. Next steps: USF to update editable version of the architecture with options proposed, LD/USF to brainstorm and conclude 1:M cost effective/centralized requirements. Proposed decision on Jun 30 2022 is to re-parent. Will connect back to finalize the decision at the right moment."
+          ],
+          "fieldReasoning": {
+            "FR-3": "Requirement mentions concepts related to 'addressLine1': address",
+            "FR-20": "Requirement mentions concepts related to 'addressLine1': address",
+            "FR-21": "Requirement mentions concepts related to 'addressLine1': address"
+          }
+        },
+        {
+          "name": "addressLine2",
+          "dataType": "TextField",
+          "fieldGroup": "PostalAddress",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Street address line 2",
+          "requirementIds": [
+            "FR-3",
+            "FR-20",
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-3: Solution shall implement cost effective, centralized standardization approach that standardizes addresses to an uniform format. Solution will leverage USF standardized address being sent from source systems.",
+            "FR-20: Solution shall have the ability to uniquely identify addresses based on Reference 360 service crosswalk defined, the field values provided while associating the address to the constituent.",
+            "FR-21: While merging, MDM shall have ability to re-parent multiple unique child records of a constituent that are originating from the source systems as per active Constituent role/s. Ex: Constituent golden record CG1 has two unique emails. Constituent golden record CG2 has three unqiue emails. CG1 and CG2 are matching and gets merged. Merged golden record MCG12 will have only unique emails. The fields that determine uniqueness on Address, Phone and email will be identified during solutioning/design phase. 1:M Use case: Duplcates found among the un-consolidated constituent records loaded into MDM. While merging, records get re-parented. Sub use-cases: MDM merge: unique field in field group based, re-parenting de-duplication during the merge (in MDM, in pipeline) Reference 360 crosswalks can be leveraged in all the options. Next steps: USF to update editable version of the architecture with options proposed, LD/USF to brainstorm and conclude 1:M cost effective/centralized requirements. Proposed decision on Jun 30 2022 is to re-parent. Will connect back to finalize the decision at the right moment."
+          ],
+          "fieldReasoning": {
+            "FR-3": "Requirement mentions concepts related to 'addressLine2': address",
+            "FR-20": "Requirement mentions concepts related to 'addressLine2': address",
+            "FR-21": "Requirement mentions concepts related to 'addressLine2': address"
+          }
+        },
+        {
+          "name": "city",
+          "dataType": "TextField",
+          "fieldGroup": "PostalAddress",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "City",
+          "requirementIds": [
+            "FR-3",
+            "FR-20",
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-3: Solution shall implement cost effective, centralized standardization approach that standardizes addresses to an uniform format. Solution will leverage USF standardized address being sent from source systems.",
+            "FR-20: Solution shall have the ability to uniquely identify addresses based on Reference 360 service crosswalk defined, the field values provided while associating the address to the constituent.",
+            "FR-21: While merging, MDM shall have ability to re-parent multiple unique child records of a constituent that are originating from the source systems as per active Constituent role/s. Ex: Constituent golden record CG1 has two unique emails. Constituent golden record CG2 has three unqiue emails. CG1 and CG2 are matching and gets merged. Merged golden record MCG12 will have only unique emails. The fields that determine uniqueness on Address, Phone and email will be identified during solutioning/design phase. 1:M Use case: Duplcates found among the un-consolidated constituent records loaded into MDM. While merging, records get re-parented. Sub use-cases: MDM merge: unique field in field group based, re-parenting de-duplication during the merge (in MDM, in pipeline) Reference 360 crosswalks can be leveraged in all the options. Next steps: USF to update editable version of the architecture with options proposed, LD/USF to brainstorm and conclude 1:M cost effective/centralized requirements. Proposed decision on Jun 30 2022 is to re-parent. Will connect back to finalize the decision at the right moment."
+          ],
+          "fieldReasoning": {
+            "FR-3": "Field 'city' supports the requirement's data model needs",
+            "FR-20": "Field 'city' supports the requirement's data model needs",
+            "FR-21": "Field 'city' is a core person attribute needed for data integration and master data management"
+          }
+        },
+        {
+          "name": "state",
+          "dataType": "TextField",
+          "fieldGroup": "PostalAddress",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "State or province",
+          "requirementIds": [
+            "FR-3",
+            "FR-20",
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-3: Solution shall implement cost effective, centralized standardization approach that standardizes addresses to an uniform format. Solution will leverage USF standardized address being sent from source systems.",
+            "FR-20: Solution shall have the ability to uniquely identify addresses based on Reference 360 service crosswalk defined, the field values provided while associating the address to the constituent.",
+            "FR-21: While merging, MDM shall have ability to re-parent multiple unique child records of a constituent that are originating from the source systems as per active Constituent role/s. Ex: Constituent golden record CG1 has two unique emails. Constituent golden record CG2 has three unqiue emails. CG1 and CG2 are matching and gets merged. Merged golden record MCG12 will have only unique emails. The fields that determine uniqueness on Address, Phone and email will be identified during solutioning/design phase. 1:M Use case: Duplcates found among the un-consolidated constituent records loaded into MDM. While merging, records get re-parented. Sub use-cases: MDM merge: unique field in field group based, re-parenting de-duplication during the merge (in MDM, in pipeline) Reference 360 crosswalks can be leveraged in all the options. Next steps: USF to update editable version of the architecture with options proposed, LD/USF to brainstorm and conclude 1:M cost effective/centralized requirements. Proposed decision on Jun 30 2022 is to re-parent. Will connect back to finalize the decision at the right moment."
+          ],
+          "fieldReasoning": {
+            "FR-3": "Field 'state' supports the requirement's data model needs",
+            "FR-20": "Field 'state' supports the requirement's data model needs",
+            "FR-21": "Field 'state' is a core person attribute needed for data integration and master data management"
+          }
+        },
+        {
+          "name": "postalCode",
+          "dataType": "TextField",
+          "fieldGroup": "PostalAddress",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Postal/ZIP code",
+          "requirementIds": [
+            "FR-3",
+            "FR-20",
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-3: Solution shall implement cost effective, centralized standardization approach that standardizes addresses to an uniform format. Solution will leverage USF standardized address being sent from source systems.",
+            "FR-20: Solution shall have the ability to uniquely identify addresses based on Reference 360 service crosswalk defined, the field values provided while associating the address to the constituent.",
+            "FR-21: While merging, MDM shall have ability to re-parent multiple unique child records of a constituent that are originating from the source systems as per active Constituent role/s. Ex: Constituent golden record CG1 has two unique emails. Constituent golden record CG2 has three unqiue emails. CG1 and CG2 are matching and gets merged. Merged golden record MCG12 will have only unique emails. The fields that determine uniqueness on Address, Phone and email will be identified during solutioning/design phase. 1:M Use case: Duplcates found among the un-consolidated constituent records loaded into MDM. While merging, records get re-parented. Sub use-cases: MDM merge: unique field in field group based, re-parenting de-duplication during the merge (in MDM, in pipeline) Reference 360 crosswalks can be leveraged in all the options. Next steps: USF to update editable version of the architecture with options proposed, LD/USF to brainstorm and conclude 1:M cost effective/centralized requirements. Proposed decision on Jun 30 2022 is to re-parent. Will connect back to finalize the decision at the right moment."
+          ],
+          "fieldReasoning": {
+            "FR-3": "Requirement mentions concepts related to 'postalCode': address",
+            "FR-20": "Requirement mentions concepts related to 'postalCode': address",
+            "FR-21": "Requirement mentions concepts related to 'postalCode': address"
+          }
+        },
+        {
+          "name": "country",
+          "dataType": "TextField",
+          "fieldGroup": "PostalAddress",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Country",
+          "requirementIds": [
+            "FR-3",
+            "FR-20",
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-3: Solution shall implement cost effective, centralized standardization approach that standardizes addresses to an uniform format. Solution will leverage USF standardized address being sent from source systems.",
+            "FR-20: Solution shall have the ability to uniquely identify addresses based on Reference 360 service crosswalk defined, the field values provided while associating the address to the constituent.",
+            "FR-21: While merging, MDM shall have ability to re-parent multiple unique child records of a constituent that are originating from the source systems as per active Constituent role/s. Ex: Constituent golden record CG1 has two unique emails. Constituent golden record CG2 has three unqiue emails. CG1 and CG2 are matching and gets merged. Merged golden record MCG12 will have only unique emails. The fields that determine uniqueness on Address, Phone and email will be identified during solutioning/design phase. 1:M Use case: Duplcates found among the un-consolidated constituent records loaded into MDM. While merging, records get re-parented. Sub use-cases: MDM merge: unique field in field group based, re-parenting de-duplication during the merge (in MDM, in pipeline) Reference 360 crosswalks can be leveraged in all the options. Next steps: USF to update editable version of the architecture with options proposed, LD/USF to brainstorm and conclude 1:M cost effective/centralized requirements. Proposed decision on Jun 30 2022 is to re-parent. Will connect back to finalize the decision at the right moment."
+          ],
+          "fieldReasoning": {
+            "FR-3": "Field 'country' supports the requirement's data model needs",
+            "FR-20": "Field 'country' supports the requirement's data model needs",
+            "FR-21": "Field 'country' is a core person attribute needed for data integration and master data management"
+          }
+        },
+        {
+          "name": "addressType",
+          "dataType": "LookupField",
+          "fieldGroup": "PostalAddress",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": true,
+          "lookupEntity": "AddressType",
+          "description": "Type of address (billing, shipping, home, etc.)",
+          "requirementIds": [
+            "FR-20",
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-20: Solution shall have the ability to uniquely identify addresses based on Reference 360 service crosswalk defined, the field values provided while associating the address to the constituent.",
+            "FR-21: While merging, MDM shall have ability to re-parent multiple unique child records of a constituent that are originating from the source systems as per active Constituent role/s. Ex: Constituent golden record CG1 has two unique emails. Constituent golden record CG2 has three unqiue emails. CG1 and CG2 are matching and gets merged. Merged golden record MCG12 will have only unique emails. The fields that determine uniqueness on Address, Phone and email will be identified during solutioning/design phase. 1:M Use case: Duplcates found among the un-consolidated constituent records loaded into MDM. While merging, records get re-parented. Sub use-cases: MDM merge: unique field in field group based, re-parenting de-duplication during the merge (in MDM, in pipeline) Reference 360 crosswalks can be leveraged in all the options. Next steps: USF to update editable version of the architecture with options proposed, LD/USF to brainstorm and conclude 1:M cost effective/centralized requirements. Proposed decision on Jun 30 2022 is to re-parent. Will connect back to finalize the decision at the right moment."
+          ],
+          "fieldReasoning": {
+            "FR-20": "Requirement mentions concepts related to 'addressType': address",
+            "FR-21": "Requirement mentions concepts related to 'addressType': address"
+          }
+        },
+        {
+          "name": "phoneNumber",
+          "dataType": "TextField",
+          "fieldGroup": "Phone",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Phone number",
+          "requirementIds": [
+            "FR-4",
+            "FR-20",
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-4: Solution shall implement cost effective, centralized standardization approach that standardizes phone numbers to an uniform format. Solution will leverage USF standardized phone being sent from source systems.",
+            "FR-20: Solution shall have the ability to uniquely identify addresses based on Reference 360 service crosswalk defined, the field values provided while associating the address to the constituent.",
+            "FR-21: While merging, MDM shall have ability to re-parent multiple unique child records of a constituent that are originating from the source systems as per active Constituent role/s. Ex: Constituent golden record CG1 has two unique emails. Constituent golden record CG2 has three unqiue emails. CG1 and CG2 are matching and gets merged. Merged golden record MCG12 will have only unique emails. The fields that determine uniqueness on Address, Phone and email will be identified during solutioning/design phase. 1:M Use case: Duplcates found among the un-consolidated constituent records loaded into MDM. While merging, records get re-parented. Sub use-cases: MDM merge: unique field in field group based, re-parenting de-duplication during the merge (in MDM, in pipeline) Reference 360 crosswalks can be leveraged in all the options. Next steps: USF to update editable version of the architecture with options proposed, LD/USF to brainstorm and conclude 1:M cost effective/centralized requirements. Proposed decision on Jun 30 2022 is to re-parent. Will connect back to finalize the decision at the right moment."
+          ],
+          "fieldReasoning": {
+            "FR-4": "Requirement mentions concepts related to 'phoneNumber': phone",
+            "FR-20": "Field 'phoneNumber' supports the requirement's data model needs",
+            "FR-21": "Requirement mentions concepts related to 'phoneNumber': phone"
+          }
+        },
+        {
+          "name": "phoneType",
+          "dataType": "LookupField",
+          "fieldGroup": "Phone",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": true,
+          "lookupEntity": "PhoneType",
+          "description": "Type of phone (mobile, home, work, etc.)",
+          "requirementIds": [
+            "FR-4",
+            "FR-20",
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-4: Solution shall implement cost effective, centralized standardization approach that standardizes phone numbers to an uniform format. Solution will leverage USF standardized phone being sent from source systems.",
+            "FR-20: Solution shall have the ability to uniquely identify addresses based on Reference 360 service crosswalk defined, the field values provided while associating the address to the constituent.",
+            "FR-21: While merging, MDM shall have ability to re-parent multiple unique child records of a constituent that are originating from the source systems as per active Constituent role/s. Ex: Constituent golden record CG1 has two unique emails. Constituent golden record CG2 has three unqiue emails. CG1 and CG2 are matching and gets merged. Merged golden record MCG12 will have only unique emails. The fields that determine uniqueness on Address, Phone and email will be identified during solutioning/design phase. 1:M Use case: Duplcates found among the un-consolidated constituent records loaded into MDM. While merging, records get re-parented. Sub use-cases: MDM merge: unique field in field group based, re-parenting de-duplication during the merge (in MDM, in pipeline) Reference 360 crosswalks can be leveraged in all the options. Next steps: USF to update editable version of the architecture with options proposed, LD/USF to brainstorm and conclude 1:M cost effective/centralized requirements. Proposed decision on Jun 30 2022 is to re-parent. Will connect back to finalize the decision at the right moment."
+          ],
+          "fieldReasoning": {
+            "FR-4": "Requirement mentions concepts related to 'phoneType': phone",
+            "FR-20": "Field 'phoneType' supports the requirement's data model needs",
+            "FR-21": "Requirement mentions concepts related to 'phoneType': phone"
+          }
+        },
+        {
+          "name": "phoneCountryCode",
+          "dataType": "TextField",
+          "fieldGroup": "Phone",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Country code for phone number",
+          "requirementIds": [
+            "FR-4"
+          ],
+          "sourceRequirements": [
+            "FR-4: Solution shall implement cost effective, centralized standardization approach that standardizes phone numbers to an uniform format. Solution will leverage USF standardized phone being sent from source systems."
+          ],
+          "fieldReasoning": {
+            "FR-4": "Requirement mentions concepts related to 'phoneCountryCode': phone"
+          }
+        },
+        {
+          "name": "electronicAddress",
+          "dataType": "TextField",
+          "fieldGroup": "ElectronicAddress",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Email address",
+          "requirementIds": [
+            "FR-1",
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-1: Data Integration requirements",
+            "FR-21: Data Model"
+          ],
+          "fieldReasoning": {
+            "FR-1": "Field 'electronicAddress' supports the requirement's data model needs",
+            "FR-21": "Requirement mentions concepts related to 'electronicAddress': address"
+          }
+        },
+        {
+          "name": "electronicAddressType",
+          "dataType": "LookupField",
+          "fieldGroup": "ElectronicAddress",
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": true,
+          "lookupEntity": "ElectronicAddressType",
+          "description": "Type of electronic address (personal, work, etc.)",
+          "requirementIds": [
+            "FR-21"
+          ],
+          "sourceRequirements": [
+            "FR-21: While merging, MDM shall have ability to re-parent multiple unique child records of a constituent that are originating from the source systems as per active Constituent role/s. Ex: Constituent golden record CG1 has two unique emails. Constituent golden record CG2 has three unqiue emails. CG1 and CG2 are matching and gets merged. Merged golden record MCG12 will have only unique emails. The fields that determine uniqueness on Address, Phone and email will be identified during solutioning/design phase. 1:M Use case: Duplcates found among the un-consolidated constituent records loaded into MDM. While merging, records get re-parented. Sub use-cases: MDM merge: unique field in field group based, re-parenting de-duplication during the merge (in MDM, in pipeline) Reference 360 crosswalks can be leveraged in all the options. Next steps: USF to update editable version of the architecture with options proposed, LD/USF to brainstorm and conclude 1:M cost effective/centralized requirements. Proposed decision on Jun 30 2022 is to re-parent. Will connect back to finalize the decision at the right moment."
+          ],
+          "fieldReasoning": {
+            "FR-21": "Requirement mentions concepts related to 'electronicAddressType': constituent"
+          }
+        },
+        {
+          "name": "constituentId",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": true,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "USF constituent identifier",
+          "requirementIds": [
+            "FR-1",
+            "FR-10"
+          ],
+          "sourceRequirements": [
+            "FR-1: Solution shall have the ability to pull data that feeds six out of eleven current tableau reports referenced in the file: Eventually solution shall provide ability to eliminate the use of ODS. (The reports specified in the fie are generated from the source systems: workday, slate, sfaq, banner.)",
+            "FR-10: Solution shall replicate and eventually replace current Slate integration into ODS for reporting needs. (Slate - transactional+customer+Nmcustomer) with Snowflake/Azure pipeline. The integration from Slate as a system will not send any data to MDM. SEM - Admissions is the group that runs reports. Aspiration is to generate the reports from the MDM/Snowflake solution. Jun 11 2022: business runs reports from Banner at present. The integration at present loads data into Banner from slate. Slate constitient are not meant to go into MDM till they are accepted. Unique identifier are returned back to slate from banner post load into banner. Integration Loads at present are: (1) Student application information is being loaded from slate into ODS (2) P2P Integration between various systems Report extracts at present: (1) sfaq into Snowflake ingestion for reporting (to be reviewed during 0B/phase 1) Open questions: Why was the integration performed the way it was performed?is there a need to join slate and banner information. Proposed flow: prospect from slate --> mdm. Banner information --> mdm. MDM cross reference information sent to snowflake providing the relationship to generate reports. Use cases: 1 - New prospect in slate (s1) --> gets accepted --> loaded into banner (b1) --> unique id generated/loaded back into slate/sfaq/sf-stu --> mdm generated unique id (u1). --> alumni (w1). Snowflake record will be p1. U1 joins with banner, sfaq, workday in addition to the transactional data. The dimensional model will be including all these. Reporting examples: - # of registration vs acceptance by time, state, race"
+          ],
+          "fieldReasoning": {
+            "FR-1": "Requirement mentions concepts related to 'constituentId': id",
+            "FR-10": "FR-10 explicitly mentions 'unique identifier' multiple times: 'Unique identifier are returned back to slate from banner', 'unique id generated/loaded back into slate', and 'MDM generated unique id (u1)'. This field is critical for cross-referencing between Slate, Banner, and MDM systems as described in the proposed flow."
+          }
+        },
+        {
+          "name": "classification",
+          "dataType": "LookupField",
+          "fieldGroup": null,
+          "isCustom": true,
+          "isRequired": false,
+          "isLookup": true,
+          "lookupEntity": "Classification",
+          "description": "Constituent classification (Full time staff, Part time staff, Student, Alumni, etc.)",
+          "requirementIds": [
+            "FR-34"
+          ],
+          "sourceRequirements": [
+            "FR-34: Solution shall have ability to update ServiceNow user profile with information from MDM Golden record/transactional information replacing the current integration at USF. This integration shall include the field Classification. Full time staff, Part time staff are examples of the field Classification."
+          ],
+          "fieldReasoning": {
+            "FR-34": "Field name 'classification' is mentioned or referenced in the requirement"
+          }
+        },
+        {
+          "name": "primaryRole",
+          "dataType": "LookupField",
+          "fieldGroup": null,
+          "isCustom": true,
+          "isRequired": false,
+          "isLookup": true,
+          "lookupEntity": "ConstituentRole",
+          "description": "Primary role of the constituent (Student, Staff, Faculty, Alumni, etc.)",
+          "requirementIds": [
+            "FR-22",
+            "FR-23"
+          ],
+          "sourceRequirements": [
+            "FR-22: Solution shall have the ability to identify and survive golden Constituent entity values based on the primary role of matching constituents. Matching constituents will be originating from from different source systems. Each source system will have role information. Addresses and other relevant 1:M child entities to be pulled based on role information into the golden record. Primary role hierarchy document: https://docs.google.com/spreadsheets/d/1w8V-sb6oOptz5hxri2ajlWb96Gxom_I59N-PxgrIiOo/edit#gid=619866497",
+            "FR-23: Solution shall have the ability to survive a complete Constituent entity record of a source system wihout considering attributes from other systems. The surviving source system shall be determined by the primary role of the Constituent. Except 1:M child entities of the Constituent. MDM Gap: MDM tool at present doesnt have the ability to survive a complete source record where source name determined at run time. Will be addressed by upstream pipeline processing by Snowflake/Azure per discussions among USF, Lumendata, Informatica. Primary role hierarchy document: https://docs.google.com/spreadsheets/d/1w8V-sb6oOptz5hxri2ajlWb96Gxom_I59N-PxgrIiOo/edit#gid=619866497"
+          ],
+          "fieldReasoning": {
+            "FR-22": "Requirement mentions concepts related to 'primaryRole': constituent",
+            "FR-23": "Requirement mentions concepts related to 'primaryRole': name, constituent"
+          }
+        },
+        {
+          "name": "meta_businessId",
+          "dataType": "TextField",
+          "fieldGroup": "_meta",
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Unique business identifier",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard meta field - required for all entities"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "meta_sourceSystem",
+          "dataType": "TextField",
+          "fieldGroup": "_meta",
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Source system name (Banner, Workday, Slate, ServiceNow, etc.)",
+          "requirementIds": [
+            "STANDARD",
+            "FR-6",
+            "FR-7",
+            "FR-8"
+          ],
+          "sourceRequirements": [
+            "Standard meta field - required for all entities",
+            "FR-6: Solution shall have ability to source banner data along with its relationships among objects. This data will be leveraged for reporting per need.",
+            "FR-7: Solution shall have the ability to pull all Banner data through relevant connection mechanism. The connection mechanism can be either JDBC, JDBC vis ADF and/or Ethos API etc., 8/10: current method is JDBC and we wanted them to stick to it. It can support Ethos API down the road, yet our current method we tested is JDBC via ADF.",
+            "FR-8: Solution shall have the ability to pull all workday data through SOAP API."
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM",
+            "FR-6": "Field 'meta_sourceSystem' supports the requirement's data model needs",
+            "FR-7": "Field 'meta_sourceSystem' supports the requirement's data model needs",
+            "FR-8": "Field 'meta_sourceSystem' supports the requirement's data model needs"
+          }
+        },
+        {
+          "name": "meta_sourceSystemId",
+          "dataType": "TextField",
+          "fieldGroup": "_meta",
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "ID in the source system",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard meta field - required for all entities"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "meta_activeFlag",
+          "dataType": "BooleanField",
+          "fieldGroup": "_meta",
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Active/inactive indicator",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard meta field - required for all entities"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "meta_createdDate",
+          "dataType": "DateTimeField",
+          "fieldGroup": "_meta",
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Record creation timestamp",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard meta field - required for all entities"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "meta_lastUpdateDate",
+          "dataType": "DateTimeField",
+          "fieldGroup": "_meta",
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Last update timestamp",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard meta field - required for all entities"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "meta_createdBy",
+          "dataType": "TextField",
+          "fieldGroup": "_meta",
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "User who created the record",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard meta field - required for all entities"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "meta_lastUpdatedBy",
+          "dataType": "TextField",
+          "fieldGroup": "_meta",
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "User who last updated the record",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard meta field - required for all entities"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        }
+      ]
+    },
+    {
+      "name": "AddressType",
+      "type": "ReferenceEntity",
+      "description": "Lookup values for address types",
+      "fields": [
+        {
+          "name": "code",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Address type code",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "description",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Address type description",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "displayOrder",
+          "dataType": "IntegerField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Display order for UI",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "activeFlag",
+          "dataType": "BooleanField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Active/inactive indicator",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        }
+      ]
+    },
+    {
+      "name": "PhoneType",
+      "type": "ReferenceEntity",
+      "description": "Lookup values for phone types",
+      "fields": [
+        {
+          "name": "code",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Phone type code",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "description",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Phone type description",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "displayOrder",
+          "dataType": "IntegerField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Display order for UI",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "activeFlag",
+          "dataType": "BooleanField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Active/inactive indicator",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ElectronicAddressType",
+      "type": "ReferenceEntity",
+      "description": "Lookup values for electronic address types",
+      "fields": [
+        {
+          "name": "code",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Electronic address type code",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "description",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Electronic address type description",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "displayOrder",
+          "dataType": "IntegerField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Display order for UI",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "activeFlag",
+          "dataType": "BooleanField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Active/inactive indicator",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Classification",
+      "type": "ReferenceEntity",
+      "description": "Lookup values for constituent classifications",
+      "fields": [
+        {
+          "name": "code",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Classification code",
+          "requirementIds": [
+            "STANDARD",
+            "FR-34"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field",
+            "FR-34: Classification field for ServiceNow integration"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM",
+            "FR-34": "Requirement mentions concepts related to 'code': classification, class"
+          }
+        },
+        {
+          "name": "description",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Classification description",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "displayOrder",
+          "dataType": "IntegerField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Display order for UI",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "activeFlag",
+          "dataType": "BooleanField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Active/inactive indicator",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ConstituentRole",
+      "type": "ReferenceEntity",
+      "description": "Lookup values for constituent roles",
+      "fields": [
+        {
+          "name": "code",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": true,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Role code",
+          "requirementIds": [
+            "STANDARD",
+            "FR-22",
+            "FR-23"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field",
+            "FR-22: Primary role for survivorship",
+            "FR-23: Primary role for survivorship"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM",
+            "FR-22": "Requirement mentions concepts related to 'code': role, primary role",
+            "FR-23": "Requirement mentions concepts related to 'code': role, primary role"
+          }
+        },
+        {
+          "name": "description",
+          "dataType": "TextField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Role description",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "displayOrder",
+          "dataType": "IntegerField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Display order for UI",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        },
+        {
+          "name": "activeFlag",
+          "dataType": "BooleanField",
+          "fieldGroup": null,
+          "isCustom": false,
+          "isRequired": false,
+          "isLookup": false,
+          "lookupEntity": null,
+          "description": "Active/inactive indicator",
+          "requirementIds": [
+            "STANDARD"
+          ],
+          "sourceRequirements": [
+            "Standard reference entity field"
+          ],
+          "fieldReasoning": {
+            "STANDARD": "Standard meta field required for all entities in Informatica MDM"
+          }
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "fromEntity": "Person",
+      "toEntity": "AddressType",
+      "relationshipType": "hasMany",
+      "description": "Person can have multiple addresses with different types"
+    },
+    {
+      "fromEntity": "Person",
+      "toEntity": "PhoneType",
+      "relationshipType": "hasMany",
+      "description": "Person can have multiple phone numbers with different types"
+    },
+    {
+      "fromEntity": "Person",
+      "toEntity": "ElectronicAddressType",
+      "relationshipType": "hasMany",
+      "description": "Person can have multiple email addresses with different types"
+    },
+    {
+      "fromEntity": "Person",
+      "toEntity": "Classification",
+      "relationshipType": "hasOne",
+      "description": "Person has one classification"
+    },
+    {
+      "fromEntity": "Person",
+      "toEntity": "ConstituentRole",
+      "relationshipType": "hasOne",
+      "description": "Person has one primary role"
+    }
+  ]
+}
