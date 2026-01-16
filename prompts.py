@@ -16,36 +16,83 @@ OUTPUT FORMAT:
 Return data model as valid JSON with this exact structure:
 
 {
-  "entities": [
-    {
-      "name": "EntityName",
-      "type": "BusinessEntity",
-      "description": "Brief description",
-      "fields": [
-        {
-          "name": "fieldName",
-          "dataType": "TextField",
-          "fieldGroup": null,
-          "isCustom": false,
-          "isRequired": true,
-          "isLookup": false,
-          "lookupEntity": null,
-          "description": "Field description",
-          "requirementIds": ["FR-001"],
-          "sourceRequirements": ["FR-001: Full requirement text"]
-        }
-      ]
-    }
-  ],
-  "relationships": [
-    {
-      "fromEntity": "EntityA",
-      "toEntity": "EntityB",
-      "relationshipType": "hasMany",
-      "description": "Relationship description"
-    }
-  ]
+  "metadata": {
+    "originalBRD": "[Complete BRD text exactly as provided]",
+    "generatedDate": "YYYY-MM-DD",
+    "platform": "informatica"
+  },
+  "reasoning": {
+    "summary": "One paragraph explaining your overall approach and key decisions",
+    "entityDecisions": [
+      {
+        "entityName": "Person",
+        "entityType": "BusinessEntity",
+        "reason": "Detailed explanation of why you chose this entity",
+        "brdReference": "Exact quote from BRD that triggered this decision",
+        "ootbVsCustom": "OOTB Person entity" or "Custom entity because..."
+      }
+    ],
+    "fieldDecisions": [
+      {
+        "entityName": "Person",
+        "fieldName": "firstName",
+        "fieldGroup": null,
+        "reason": "Detailed explanation of why you added this field",
+        "brdReference": "Exact quote from BRD",
+        "inferredOrExplicit": "explicit" or "inferred",
+        "ootbVsCustom": "OOTB field" or "Custom field because...",
+        "alternativesConsidered": "What other OOTB options you considered and why rejected"
+      }
+    ]
+  },
+  "dataModel": {
+    "entities": [
+      {
+        "name": "EntityName",
+        "type": "BusinessEntity",
+        "description": "Brief description",
+        "fields": [
+          {
+            "name": "fieldName",
+            "dataType": "TextField",
+            "fieldGroup": null,
+            "isCustom": false,
+            "isRequired": true,
+            "isLookup": false,
+            "lookupEntity": null,
+            "description": "Field description",
+            "requirementIds": ["FR-001"],
+            "sourceRequirements": ["FR-001: Full requirement text"]
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "fromEntity": "EntityA",
+        "toEntity": "EntityB",
+        "relationshipType": "hasMany",
+        "description": "Relationship description"
+      }
+    ]
+  }
 }
+
+CRITICAL REASONING REQUIREMENTS:
+
+For EVERY entity:
+- Explain why you chose this entity type (Person vs Organization vs Product vs Custom)
+- Quote the exact BRD text that led to this decision
+- State whether it's OOTB or custom
+
+For EVERY field:
+- Explain why you added this field
+- Quote the exact BRD text (or state "Inferred from standard MDM practice")
+- State if it was explicitly mentioned or inferred
+- State whether it's OOTB or custom
+- If custom, explain what OOTB alternatives you considered and why they didn't work
+
+The reasoning section helps users understand your decision-making process and validates that you followed the OOTB-first approach.
 
 REQUIREMENT TRACEABILITY:
 
@@ -301,12 +348,24 @@ Double-check before returning:
 - isCustom set correctly
 - Field groups properly assigned
 - Every LookupField has a corresponding ReferenceEntity
+- Complete metadata section with originalBRD
+- Complete reasoning section with entityDecisions and fieldDecisions
+- Every entity and field has reasoning explaining the decision
 
 """
 
 
 def build_prompt(brd_text: str, platform: str = "informatica") -> tuple:
-    """Build prompt for Claude"""
+    """
+    Build prompt for data model generation using Cursor AI
+    
+    Args:
+        brd_text: Extracted BRD text content
+        platform: Target platform (currently only "informatica" supported)
+    
+    Returns:
+        tuple: (system_prompt, user_prompt)
+    """
     system_prompt = INFORMATICA_SYSTEM_PROMPT
     
     user_prompt = f"""
@@ -315,7 +374,7 @@ Analyze this BRD and generate an Informatica MDM data model.
 BRD:
 {brd_text}
 
-Return ONLY valid JSON.
+Return ONLY valid JSON with metadata, reasoning, and dataModel sections.
 """
     
     return system_prompt, user_prompt
