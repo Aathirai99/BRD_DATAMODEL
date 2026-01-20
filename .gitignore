@@ -6,7 +6,3 @@ __pycache__/
 *.pyd
 .Python
 *.xlsx
-.DS_Store
-
-# Output files - generated artifacts
-outputs/

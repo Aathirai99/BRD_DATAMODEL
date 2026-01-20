@@ -6,7 +6,7 @@
 brd-datamodel-core/
 │
 ├── 📄 INPUT FILES (Root Directory)
-│   └── USF Requirements Document Cleaned.xlsx  [Input: BRD Excel file]
+│   └── USF Requirements Document Cleaned.xlsx  [Input: FRD Excel file]
 │
 ├── 🐍 CORE MODULES
 │   ├── run_full_pipeline.py          [Orchestrator: Main entry point]
@@ -39,7 +39,7 @@ brd-datamodel-core/
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                        STEP 1: PARSE BRD                            │
+│                        STEP 1: PARSE FRD                            │
 │                                                                     │
 │  Input:  USF Requirements Document Cleaned.xlsx                    │
 │  Module: parsers.py → parse_document()                             │
@@ -56,7 +56,7 @@ brd-datamodel-core/
 │  Input:  brd_text (from Step 1)                                    │
 │  Module: cursor_workflow.py → save_prompt_to_file()                │
 │           prompts.py → INFORMATICA_SYSTEM_PROMPT                   │
-│  Process: Combine system prompt + BRD text → Format for Cursor     │
+│  Process: Combine system prompt + FRD text → Format for Cursor     │
 │  Output: [filename]_prompt.txt                                     │
 │                                                                     │
 │  Function: step2_generate_prompt() in run_full_pipeline.py        │
@@ -187,7 +187,7 @@ run_full_pipeline()
 ### Modular Step Functions (Can be called independently)
 
 ```python
-# Step 1: Parse BRD
+# Step 1: Parse FRD
 brd_text, outputs = step1_parse_brd(brd_file_path=None)
 
 # Step 2: Generate Prompt
@@ -207,7 +207,7 @@ drawio_path, html_path = step4_generate_visualizations(json_path=None, outputs=N
 - **Role**: Main entry point, coordinates all steps
 - **Functions**: 
   - `run_full_pipeline()` - Full pipeline execution
-  - `step1_parse_brd()` - BRD parsing
+  - `step1_parse_brd()` - FRD parsing
   - `step2_generate_prompt()` - Prompt generation
   - `step4_generate_visualizations()` - Visualization generation
   - `regenerate_step()` - Selective step regeneration
@@ -222,7 +222,7 @@ drawio_path, html_path = step4_generate_visualizations(json_path=None, outputs=N
 - **Role**: Define AI prompt structure
 - **Content**:
   - `INFORMATICA_SYSTEM_PROMPT` - System instructions for AI
-  - `build_prompt()` - Combine system prompt + BRD text
+  - `build_prompt()` - Combine system prompt + FRD text
 
 ### 4. `cursor_workflow.py` - Cursor AI Integration
 - **Role**: Bridge between pipeline and Cursor AI
@@ -274,7 +274,7 @@ Excel → Parse → Prompt → [Manual: New JSON] → Visualizations
 outputs/
 │
 ├── [filename]_prompt.txt                    # Cursor AI prompt (Step 2)
-│   └── Contains: System prompt + BRD text
+│   └── Contains: System prompt + FRD text
 │
 ├── [filename]_response.json                 # Data model JSON (Step 3)
 │   └── Contains: {
@@ -308,9 +308,9 @@ outputs/
 python run_full_pipeline.py
 ```
 
-### 2. Command Line - Specific BRD
+### 2. Command Line - Specific FRD
 ```bash
-python run_full_pipeline.py --brd "path/to/brd.xlsx"
+python run_full_pipeline.py --brd "path/to/frd.xlsx"
 ```
 
 ### 3. Command Line - Visualizations Only
@@ -365,7 +365,7 @@ The JSON response follows this structure:
 ```json
 {
   "metadata": {
-    "originalBRD": "...",
+    "originalFRD": "...",
     "generatedDate": "YYYY-MM-DD",
     "platform": "informatica"
   },

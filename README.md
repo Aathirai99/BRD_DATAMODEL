@@ -1,13 +1,13 @@
-# BRD to Data Model Generator
+# FRD to Data Model Generator
 
-Convert Business Requirements Documents into Informatica MDM data models using AI.
+Convert Functional Requirements Documents into Informatica MDM data models using AI.
 
 ## Quick Start
 ```bash
 # 1. Install dependencies
 pip install pandas openpyxl
 
-# 2. Place your BRD Excel file in the project folder
+# 2. Place your FRD Excel file in the project folder
 
 # 3. Run the full pipeline
 python run_full_pipeline.py
@@ -24,10 +24,10 @@ python run_full_pipeline.py
 python run_full_pipeline.py
 ```
 
-### Specify BRD File
+### Specify FRD File
 ```bash
 # Use specific Excel file
-python run_full_pipeline.py --brd "path/to/your/brd.xlsx"
+python run_full_pipeline.py --brd "path/to/your/frd.xlsx"
 ```
 
 ### Generate Visualizations Only
@@ -38,7 +38,7 @@ python run_full_pipeline.py --visuals-only
 
 ## Workflow
 
-1. **Place Excel BRD** in project folder
+1. **Place Excel FRD** in project folder
 2. **Run pipeline**: `python run_full_pipeline.py`
 3. **Cursor AI**: Process the generated prompt (manual step)
 4. **Auto-generate**: Visualizations created automatically when JSON exists
@@ -53,6 +53,6 @@ python run_full_pipeline.py --visuals-only
 ## Testing
 
 ```bash
-# Test with sample BRD
+# Test with sample FRD
 python test_workflow.py
 ```

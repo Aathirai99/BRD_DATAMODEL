@@ -1,5 +1,5 @@
 """
-Modular Pipeline: BRD Excel → Parse → Prompt → Cursor AI → JSON → Visualizations
+Modular Pipeline: FRD Excel → Parse → Prompt → Cursor AI → JSON → Visualizations
 
 Each step is a separate, reusable function that Cursor can call independently.
 This allows for iterative refinement and selective re-execution of specific steps.
@@ -36,10 +36,10 @@ def find_excel_files(directory="."):
 
 def get_output_filename(brd_file_path):
     """
-    Generate output filenames based on BRD filename
+    Generate output filenames based on FRD filename
     
     Args:
-        brd_file_path: Path to BRD Excel file
+        brd_file_path: Path to FRD Excel file
     
     Returns:
         Dictionary with output file paths
@@ -67,15 +67,15 @@ def ensure_outputs_directory():
 
 def step1_parse_brd(brd_file_path=None):
     """
-    STEP 1: Parse Excel BRD file and extract text
+    STEP 1: Parse Excel FRD file and extract text
     
     This function:
     - Finds Excel file (auto-detects if not provided)
     - Parses all sheets and extracts text
-    - Returns BRD text and output file paths
+    - Returns FRD text and output file paths
     
     Args:
-        brd_file_path: Path to BRD Excel file (auto-detects if None)
+        brd_file_path: Path to FRD Excel file (auto-detects if None)
     
     Returns:
         tuple: (brd_text, outputs_dict) or (None, None) if error
@@ -83,10 +83,10 @@ def step1_parse_brd(brd_file_path=None):
     Usage:
         brd_text, outputs = step1_parse_brd()
         # or
-        brd_text, outputs = step1_parse_brd("path/to/brd.xlsx")
+        brd_text, outputs = step1_parse_brd("path/to/frd.xlsx")
     """
     print("=" * 70)
-    print("STEP 1: Parsing BRD Excel File")
+    print("STEP 1: Parsing FRD Excel File")
     print("=" * 70)
     
     # Find Excel file
@@ -105,18 +105,18 @@ def step1_parse_brd(brd_file_path=None):
         print(f"❌ File not found: {brd_file_path}")
         return None, None
     
-    print(f"📄 BRD File: {brd_file_path}")
+    print(f"📄 FRD File: {brd_file_path}")
     
     # Generate output filenames
     outputs = get_output_filename(brd_file_path)
     ensure_outputs_directory()
     
-    # Parse BRD
+    # Parse FRD
     try:
         with open(brd_file_path, 'rb') as f:
             brd_text = parse_document(f)
         
-        print(f"✅ Successfully parsed BRD")
+        print(f"✅ Successfully parsed FRD")
         print(f"   📊 Extracted {len(brd_text):,} characters")
         print(f"   📊 Approximately {len(brd_text.split()):,} words")
         print()
@@ -124,21 +124,21 @@ def step1_parse_brd(brd_file_path=None):
         return brd_text, outputs
         
     except Exception as e:
-        print(f"❌ Error parsing BRD: {str(e)}")
+        print(f"❌ Error parsing FRD: {str(e)}")
         return None, None
 
 
 def step2_generate_prompt(brd_text, outputs):
     """
-    STEP 2: Generate Cursor AI prompt from BRD text
+    STEP 2: Generate Cursor AI prompt from FRD text
     
     This function:
-    - Takes parsed BRD text
+    - Takes parsed FRD text
     - Generates formatted prompt for Cursor AI
     - Saves prompt to file
     
     Args:
-        brd_text: Parsed BRD text from step1_parse_brd()
+        brd_text: Parsed FRD text from step1_parse_brd()
         outputs: Output file paths dict from step1_parse_brd()
     
     Returns:
@@ -152,7 +152,7 @@ def step2_generate_prompt(brd_text, outputs):
     print("=" * 70)
     
     if not brd_text:
-        print("❌ No BRD text provided!")
+        print("❌ No FRD text provided!")
         return None
     
     try:
@@ -283,17 +283,17 @@ def run_full_pipeline(brd_file_path=None):
     for iterative refinement.
     
     Args:
-        brd_file_path: Path to BRD Excel file (auto-detects if None)
+        brd_file_path: Path to FRD Excel file (auto-detects if None)
     
     Returns:
         bool: True if successful
     """
     print("=" * 70)
-    print("🚀 BRD to Data Model - Full Pipeline")
+    print("🚀 FRD to Data Model - Full Pipeline")
     print("=" * 70)
     print()
     
-    # Step 1: Parse BRD
+    # Step 1: Parse FRD
     brd_text, outputs = step1_parse_brd(brd_file_path)
     if not brd_text:
         return False
@@ -373,12 +373,12 @@ def main():
     import argparse
     
     parser = argparse.ArgumentParser(
-        description="Modular pipeline: BRD Excel → Parse → Prompt → Cursor AI → JSON → Visualizations"
+        description="Modular pipeline: FRD Excel → Parse → Prompt → Cursor AI → JSON → Visualizations"
     )
     parser.add_argument(
         '--brd',
         type=str,
-        help='Path to BRD Excel file (auto-detects if not provided)'
+        help='Path to FRD Excel file (auto-detects if not provided)'
     )
     parser.add_argument(
         '--step',

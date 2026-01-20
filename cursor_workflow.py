@@ -12,7 +12,7 @@ def generate_cursor_prompt(brd_text, platform="informatica"):
     Generate a complete prompt for Cursor AI
     
     Args:
-        brd_text: Extracted BRD text
+        brd_text: Extracted FRD text
         platform: Target platform (informatica or snowflake)
     
     Returns:
@@ -37,7 +37,7 @@ YOU CANNOT:
 ❌ Change any .py files
 
 YOU CAN ONLY:
-✅ Read the BRD below
+✅ Read the FRD below
 ✅ Follow the Informatica rules below
 ✅ Output valid JSON data model
 ✅ Nothing else
@@ -54,7 +54,7 @@ Your response must be ONLY JSON starting with { and ending with }
     cursor_prompt = f"""{cursor_constraint}
 {system_prompt}
 
-===== BRD TO ANALYZE =====
+===== FRD TO ANALYZE =====
 
 {brd_text}
 
@@ -73,7 +73,7 @@ def save_prompt_to_file(brd_text, output_path="cursor_prompt.txt", platform="inf
     Save the Cursor prompt to a text file
     
     Args:
-        brd_text: Extracted BRD text
+        brd_text: Extracted FRD text
         output_path: Where to save the prompt file
         platform: Target platform
     """
@@ -192,7 +192,7 @@ def validate_data_model(data_model):
 
 # Quick test function
 def test_workflow():
-    """Test the workflow with a simple BRD"""
+    """Test the workflow with a simple FRD"""
     
     test_brd = """
     We need to track customer information including:
