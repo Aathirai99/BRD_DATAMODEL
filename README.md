@@ -53,6 +53,6 @@ python run_full_pipeline.py --visuals-only
 ## Testing
 
 ```bash
-# Test with sample FRD
-python test_workflow.py
+# Test Cursor workflow with sample FRD text
+python -c "from cursor_workflow import test_workflow; test_workflow()"
 ```

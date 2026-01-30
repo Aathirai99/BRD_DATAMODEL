@@ -5,4 +5,11 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
+
+# FRD / Company data - do not commit
 *.xlsx
+outputs/
+*Requirements*
+*requirements*.xlsx
+*FRD*
+*brd*.xlsx

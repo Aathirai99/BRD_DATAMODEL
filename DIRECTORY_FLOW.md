@@ -6,15 +6,15 @@
 brd-datamodel-core/
 │
 ├── 📄 INPUT FILES (Root Directory)
-│   └── USF Requirements Document Cleaned.xlsx  [Input: FRD Excel file]
+│   ├── [your_frd].xlsx                         [Input: FRD Excel file]
+│   └── ootb_person_reference.txt               [Person OOTB catalog: 173 fields, 20 groups]
 │
 ├── 🐍 CORE MODULES
 │   ├── run_full_pipeline.py          [Orchestrator: Main entry point]
 │   ├── parsers.py                     [Module: Excel parsing logic]
 │   ├── prompts.py                     [Module: Prompt template generation]
 │   ├── cursor_workflow.py             [Module: Cursor AI integration helpers]
-│   ├── generators.py                  [Module: Visualization generation]
-│   └── visual_config.py               [Module: Visual styling configuration]
+│   └── generators.py                  [Module: Visualization generation]
 │
 ├── 📋 DOCUMENTATION
 │   ├── README.md                      [User guide & quick start]
@@ -41,7 +41,7 @@ brd-datamodel-core/
 ┌─────────────────────────────────────────────────────────────────────┐
 │                        STEP 1: PARSE FRD                            │
 │                                                                     │
-│  Input:  USF Requirements Document Cleaned.xlsx                    │
+│  Input:  [your_frd].xlsx (or --brd path)                          │
 │  Module: parsers.py → parse_document()                             │
 │  Process: Read Excel → Extract all sheets → Convert to text        │
 │  Output: brd_text (string)                                         │
@@ -51,13 +51,14 @@ brd-datamodel-core/
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    STEP 2: GENERATE PROMPT                          │
+│                    STEP 2: BUILD FINAL PROMPT                       │
 │                                                                     │
 │  Input:  brd_text (from Step 1)                                    │
-│  Module: cursor_workflow.py → save_prompt_to_file()                │
-│           prompts.py → INFORMATICA_SYSTEM_PROMPT                   │
-│  Process: Combine system prompt + FRD text → Format for Cursor     │
-│  Output: [filename]_prompt.txt                                     │
+│  Build:  parse output (FRD) + prompts.py + ootb_person_reference   │
+│  Module: cursor_workflow.save_prompt_to_file()                     │
+│           → prompts.build_enhanced_prompt()                         │
+│           → load_person_fields_catalog() → ootb_person_reference.txt│
+│  Output: [filename]_prompt.txt  (single final prompt file)         │
 │                                                                     │
 │  Function: step2_generate_prompt() in run_full_pipeline.py        │
 │  Location: outputs/[filename]_prompt.txt                           │
@@ -65,24 +66,16 @@ brd-datamodel-core/
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│              STEP 3: CURSOR AI PROCESSING (Manual)                  │
+│              STEP 3: GIVE PROMPT TO AI → EXECUTE → JSON             │
 │                                                                     │
-│  Input:  outputs/[filename]_prompt.txt                             │
-│  Process: Manual - Read prompt → Generate JSON data model          │
+│  Input:  outputs/[filename]_prompt.txt (parse + prompts + OOTB)   │
+│  Process: AI receives that prompt, executes it, outputs JSON.       │
+│           Pipeline does NOT run the AI; you must give the prompt   │
+│           to Cursor and have it produce the JSON.                  │
 │  Output: [filename]_response.json                                  │
 │                                                                     │
-│  Function: Manual step (Cursor AI generates JSON)                  │
+│  JSON Structure: metadata, reasoning, dataModel (entities, rels)   │
 │  Location: outputs/[filename]_response.json                        │
-│                                                                     │
-│  JSON Structure:                                                    │
-│  {                                                                  │
-│    "metadata": {...},                                               │
-│    "reasoning": {...},                                              │
-│    "dataModel": {                                                   │
-│      "entities": [...],                                             │
-│      "relationships": [...]                                         │
-│    }                                                                │
-│  }                                                                  │
 └─────────────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -93,7 +86,6 @@ brd-datamodel-core/
 │  Module: cursor_workflow.py → parse_cursor_response()              │
 │           generators.py → save_drawio_file()                        │
 │           generators.py → generate_html_report()                    │
-│           visual_config.py → Styling & configuration                │
 │                                                                     │
 │  Process:                                                           │
 │    1. Parse & validate JSON                                        │
@@ -121,17 +113,17 @@ run_full_pipeline.py (Orchestrator)
     │
     ├──► cursor_workflow.py
     │    ├──► save_prompt_to_file()  [Text → Prompt file]
+    │    │         └──► generate_cursor_prompt() uses user_prompt (catalog+FRD)
     │    └──► parse_cursor_response() [JSON → Data model dict]
     │         │
     │         └──► prompts.py
-    │              └──► INFORMATICA_SYSTEM_PROMPT [Template]
+    │              ├──► build_prompt() → build_enhanced_prompt()
+    │              ├──► load_person_fields_catalog() → ootb_person_reference.txt
+    │              └──► INFORMATICA_SYSTEM_PROMPT [Template; Person refs catalog]
     │
     └──► generators.py
          ├──► save_drawio_file()     [Data model → Draw.io XML]
          └──► generate_html_report() [Data model → HTML report]
-              │
-              └──► visual_config.py
-                   └──► Styling & color configuration
 ```
 
 ---
@@ -141,15 +133,15 @@ run_full_pipeline.py (Orchestrator)
 All output files follow a consistent naming pattern based on the input Excel filename:
 
 ```
-Input:  "USF Requirements Document Cleaned.xlsx"
+Input:  "My Project FRD.xlsx"
         ↓
-Base:   "usf_requirements_document_cleaned"
+Base:   "my_project_frd"
         ↓
 Outputs:
-  - usf_requirements_document_cleaned_prompt.txt
-  - usf_requirements_document_cleaned_response.json
-  - usf_requirements_document_cleaned_data_model.drawio
-  - usf_requirements_document_cleaned_data_model_report.html
+  - my_project_frd_prompt.txt
+  - my_project_frd_response.json
+  - my_project_frd_data_model.drawio
+  - my_project_frd_data_model_report.html
 ```
 
 **Naming Rules:**
@@ -173,8 +165,8 @@ run_full_pipeline()
     │
     ├── step2_generate_prompt(brd_text, outputs)
     │   └── cursor_workflow.save_prompt_to_file()
-    │       └── prompts.build_prompt()
-    │           └── prompts.INFORMATICA_SYSTEM_PROMPT
+    │       └── generate_cursor_prompt() → prompts.build_prompt()
+    │           └── build_enhanced_prompt() → load Person catalog + FRD
     │
     ├── step3_cursor_instructions(outputs)  [Manual step - instructions only]
     │
@@ -219,15 +211,16 @@ drawio_path, html_path = step4_generate_visualizations(json_path=None, outputs=N
   - `get_document_stats()` - Calculate statistics
 
 ### 3. `prompts.py` - Prompt Templates
-- **Role**: Define AI prompt structure
+- **Role**: Define AI prompt structure and Person OOTB catalog
 - **Content**:
-  - `INFORMATICA_SYSTEM_PROMPT` - System instructions for AI
-  - `build_prompt()` - Combine system prompt + FRD text
+  - `INFORMATICA_SYSTEM_PROMPT` - System instructions (Person OOTB catalog ref, not full list)
+  - `build_prompt()` → `build_enhanced_prompt()` - System + catalog + FRD
+  - `load_person_fields_catalog()` - Read `ootb_person_reference.txt` (173 fields, 20 groups)
 
 ### 4. `cursor_workflow.py` - Cursor AI Integration
 - **Role**: Bridge between pipeline and Cursor AI
 - **Functions**:
-  - `generate_cursor_prompt()` - Format prompt for Cursor
+  - `generate_cursor_prompt()` - Constraint + system + **user_prompt (catalog+FRD)** → Cursor
   - `save_prompt_to_file()` - Save prompt to file
   - `parse_cursor_response()` - Load and validate JSON response
   - `validate_data_model()` - Validate JSON structure
@@ -237,10 +230,6 @@ drawio_path, html_path = step4_generate_visualizations(json_path=None, outputs=N
 - **Functions**:
   - `save_drawio_file()` - Generate Draw.io XML diagram
   - `generate_html_report()` - Generate HTML report with traceability
-
-### 6. `visual_config.py` - Visual Configuration
-- **Role**: Define colors, styles, and visual settings
-- **Content**: Color schemes, entity type styling, diagram layout
 
 ---
 

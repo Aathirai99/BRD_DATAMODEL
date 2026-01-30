@@ -50,13 +50,13 @@ Your response must be ONLY JSON starting with { and ending with }
 
 """
     
-    # Combine: Constraint + System Prompt + BRD + Instructions
+    # Combine: Constraint + System Prompt + User Prompt (catalog + FRD + instructions)
     cursor_prompt = f"""{cursor_constraint}
 {system_prompt}
 
-===== FRD TO ANALYZE =====
+===== PERSON OOTB CATALOG + FRD TO ANALYZE =====
 
-{brd_text}
+{user_prompt}
 
 ===== INSTRUCTIONS =====
 

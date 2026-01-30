@@ -33,33 +33,33 @@ def generate_drawio(data_model: Dict) -> str:
     business_entities = [e for e in entities if e.get('type') == 'BusinessEntity']
     
     # ============================================
-    # LAYOUT CONSTANTS - Matching Aswin_shared.drawio exactly
+    # LAYOUT CONSTANTS - Matching Aswin_shared.drawio
     # ============================================
     
     # Entity header positioning
-    ENTITY_X = -101          # Entity header x position
-    ENTITY_Y_START = 127     # First entity y position
-    ENTITY_WIDTH = 90        # Entity header width
-    ENTITY_HEIGHT = 20       # Entity header height
+    ENTITY_X = -101
+    ENTITY_Y_START = 127
+    ENTITY_WIDTH = 90
+    ENTITY_HEIGHT = 20
     
     # Field positioning (standalone fields)
-    FIELD_X = -27            # Fields x position (entity_x + 74)
-    FIELD_WIDTH = 166        # Field width
-    FIELD_HEIGHT = 20        # Field height
-    FIELD_Y_START = 165      # First field y position (entity_y + 38)
-    FIELD_SPACING = 28       # Vertical spacing between fields
+    FIELD_X = -27
+    FIELD_WIDTH = 166
+    FIELD_HEIGHT = 20
+    FIELD_Y_START = 165
+    FIELD_SPACING = 28
     
     # Field group positioning (yellow boxes)
-    FIELD_GROUP_X = -29      # Field group x position
-    FIELD_GROUP_WIDTH = 158  # Field group width
+    FIELD_GROUP_X = -29
+    FIELD_GROUP_WIDTH = 158
     
     # Expanded fields (children of field groups)
-    EXPANDED_X = 175         # Expanded fields x position
-    EXPANDED_WIDTH = 146     # Expanded field width
+    EXPANDED_X = 175
+    EXPANDED_WIDTH = 146
     
     # Lookup icon
     LOOKUP_ICON_SIZE = 17
-    LOOKUP_ICON_OFFSET = 5   # Gap between field and icon
+    LOOKUP_ICON_OFFSET = 5
     
     # Container box
     CONTAINER_X = -121
@@ -87,7 +87,11 @@ def generate_drawio(data_model: Dict) -> str:
         return str(current_id)
     
     def get_field_style(field):
-        """Determine field color based on type"""
+        """Determine field color based on type. Custom fields (including lookup) always red."""
+        # Custom fields (including custom lookup fields like classification) → red
+        if field.get('isCustom', False):
+            return COLORS['identifier']
+        
         field_group = field.get('fieldGroup')
         field_name = field.get('name', '').lower()
         
@@ -248,43 +252,40 @@ def generate_drawio(data_model: Dict) -> str:
     )
     
     # ============================================
-    # CREATE COLOR-CODED LABELS (LEGEND)
+    # CREATE COLOR-CODED LABELS (LEGEND) - top right of diagram
     # ============================================
     
-    LABEL_Y = 101.5  # Y position for all labels (matching template)
+    LABEL_PADDING = 15
+    LABEL_GAP = 12
+    LABEL_HEIGHT = 20
+    LABEL_Y = CONTAINER_Y + LABEL_PADDING
     
-    # Business Entity label (blue)
-    business_entity_label_id = get_next_id()
-    create_mxcell(
-        root, business_entity_label_id,
-        f'<font color="{COLORS["business_entity"]["font"]}">Business Entity</font>',
-        f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={COLORS["business_entity"]["fill"]};fontColor={COLORS["business_entity"]["font"]};strokeColor={COLORS["business_entity"]["stroke"]};',
-        134, LABEL_Y, 97, 20
-    )
-    
-    # General Attributes label (green)
-    general_attr_label_id = get_next_id()
-    create_mxcell(
-        root, general_attr_label_id, 'General Attributes',
-        f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={COLORS["general_attribute"]["fill"]};strokeColor={COLORS["general_attribute"]["stroke"]};',
-        248, LABEL_Y, 109, 20
-    )
-    
-    # Identifiers label (red/pink)
-    identifier_label_id = get_next_id()
-    create_mxcell(
-        root, identifier_label_id, 'Identifiers',
-        f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={COLORS["identifier"]["fill"]};strokeColor={COLORS["identifier"]["stroke"]};',
-        374, LABEL_Y, 103, 20
-    )
-    
-    # Field Groups label (yellow)
-    field_group_label_id = get_next_id()
-    create_mxcell(
-        root, field_group_label_id, 'Field Groups',
-        f'rounded=0;whiteSpace=wrap;html=1;fillColor={COLORS["field_group"]["fill"]};fontColor={COLORS["field_group"]["font"]};strokeColor={COLORS["field_group"]["stroke"]};',
-        484, LABEL_Y, 112, 20
-    )
+    # Place legend labels from right edge inward to cover top right
+    label_specs = [
+        ('Business Entity', 97, 'business_entity'),
+        ('General Attributes', 109, 'general_attribute'),
+        ('Identifiers / Custom', 140, 'identifier'),
+        ('Field Groups', 112, 'field_group'),
+    ]
+    # Right edge of container
+    legend_right = CONTAINER_X + container_width - LABEL_PADDING
+    # Place labels right-to-left so they cover top right
+    label_x = legend_right
+    for text, w, key in reversed(label_specs):
+        label_x -= (w + LABEL_GAP)
+        if key == 'business_entity':
+            style = f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={COLORS["business_entity"]["fill"]};fontColor={COLORS["business_entity"]["font"]};strokeColor={COLORS["business_entity"]["stroke"]};'
+            value = f'<font color="{COLORS["business_entity"]["font"]}">{text}</font>'
+        elif key == 'general_attribute':
+            style = f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={COLORS["general_attribute"]["fill"]};strokeColor={COLORS["general_attribute"]["stroke"]};'
+            value = text
+        elif key == 'identifier':
+            style = f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={COLORS["identifier"]["fill"]};strokeColor={COLORS["identifier"]["stroke"]};'
+            value = text
+        else:
+            style = f'rounded=0;whiteSpace=wrap;html=1;fillColor={COLORS["field_group"]["fill"]};fontColor={COLORS["field_group"]["font"]};strokeColor={COLORS["field_group"]["stroke"]};'
+            value = text
+        create_mxcell(root, get_next_id(), value, style, label_x, LABEL_Y, w, LABEL_HEIGHT)
     
     # ============================================
     # DRAW ENTITIES AND FIELDS
@@ -299,8 +300,7 @@ def generate_drawio(data_model: Dict) -> str:
         # Create entity header (blue box)
         entity_id = get_next_id()
         create_mxcell(
-            root, entity_id,
-            f'<font color="{COLORS["business_entity"]["font"]}">{entity_name}</font>',
+            root, entity_id, f'<font color="{COLORS["business_entity"]["font"]}">{entity_name}</font>',
             f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={COLORS["business_entity"]["fill"]};fontColor={COLORS["business_entity"]["font"]};strokeColor={COLORS["business_entity"]["stroke"]};',
             ENTITY_X, ENTITY_Y_START, ENTITY_WIDTH, ENTITY_HEIGHT
         )
@@ -327,11 +327,14 @@ def generate_drawio(data_model: Dict) -> str:
             field_style = get_field_style(field)
             is_lookup = field.get('isLookup', False)
             
-            # Create field box
+            # Create field box (add spacingRight for lookup fields to make room for icon)
             field_id = get_next_id()
+            field_style_str = f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={field_style["fill"]};strokeColor={field_style["stroke"]};'
+            if is_lookup:
+                field_style_str += 'spacingRight=20;'
             create_mxcell(
                 root, field_id, field_name,
-                f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={field_style["fill"]};strokeColor={field_style["stroke"]};',
+                field_style_str,
                 FIELD_X, current_field_y, FIELD_WIDTH, FIELD_HEIGHT
             )
             
@@ -342,10 +345,12 @@ def generate_drawio(data_model: Dict) -> str:
                 'edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=none;endFill=0;'
             )
             
-            # Add lookup icon if needed
+            # Add lookup icon inside the box (right side)
             if is_lookup:
                 icon_id = get_next_id()
-                create_lookup_icon(root, icon_id, FIELD_X + FIELD_WIDTH + LOOKUP_ICON_OFFSET, current_field_y + 1)
+                icon_x = FIELD_X + FIELD_WIDTH - LOOKUP_ICON_SIZE - 3
+                icon_y = current_field_y + (FIELD_HEIGHT - LOOKUP_ICON_SIZE) // 2
+                create_lookup_icon(root, icon_id, icon_x, icon_y)
             
             current_field_y += FIELD_SPACING
         
@@ -383,12 +388,15 @@ def generate_drawio(data_model: Dict) -> str:
             for group_field in group_fields:
                 field_name = group_field.get('name', 'field')
                 is_lookup = group_field.get('isLookup', False)
-                
-                # Create expanded field box
+                group_field_style = get_field_style(group_field)
+                # Create expanded field box (add spacingRight for lookup fields to make room for icon)
                 expanded_id = get_next_id()
+                expanded_style = f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={group_field_style["fill"]};strokeColor={group_field_style["stroke"]};'
+                if is_lookup:
+                    expanded_style += 'spacingRight=20;'
                 create_mxcell(
                     root, expanded_id, field_name,
-                    f'rounded=0;whiteSpace=wrap;html=1;align=left;fillColor={COLORS["general_attribute"]["fill"]};strokeColor={COLORS["general_attribute"]["stroke"]};',
+                    expanded_style,
                     EXPANDED_X, expanded_y, EXPANDED_WIDTH, FIELD_HEIGHT
                 )
                 
@@ -399,10 +407,12 @@ def generate_drawio(data_model: Dict) -> str:
                     'edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;'
                 )
                 
-                # Add lookup icon if needed
+                # Add lookup icon inside the box (right side)
                 if is_lookup:
                     icon_id = get_next_id()
-                    create_lookup_icon(root, icon_id, EXPANDED_X + EXPANDED_WIDTH + LOOKUP_ICON_OFFSET, expanded_y + 1)
+                    icon_x = EXPANDED_X + EXPANDED_WIDTH - LOOKUP_ICON_SIZE - 3
+                    icon_y = expanded_y + (FIELD_HEIGHT - LOOKUP_ICON_SIZE) // 2
+                    create_lookup_icon(root, icon_id, icon_x, icon_y)
                 
                 expanded_y += FIELD_SPACING
             
@@ -664,8 +674,16 @@ def generate_html_report(data_model: Dict, output_path: str = "data_model_report
         }}
         
         .badge-custom {{
-            background: #fff3cd;
-            color: #856404;
+            background: #f8cecc;
+            color: #b85450;
+        }}
+        
+        tr.custom-field-row {{
+            background: #f8cecc !important;
+        }}
+        
+        tr.custom-field-row:hover {{
+            background: #f5b8b5 !important;
         }}
         
         .badge-required {{
@@ -954,9 +972,10 @@ def generate_html_report(data_model: Dict, output_path: str = "data_model_report
                 properties.append(f'<span class="badge badge-group">{field_group}</span>')
             
             properties_html = ' '.join(properties)
+            row_class = ' class="custom-field-row"' if is_custom else ''
             
             html += f"""
-                                    <tr>
+                                    <tr{row_class}>
                                         <td class="field-name">{field_name}</td>
                                         <td>{data_type}</td>
                                         <td>{field_group}</td>

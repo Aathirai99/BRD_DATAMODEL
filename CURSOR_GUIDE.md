@@ -2,6 +2,33 @@
 
 This guide explains how Cursor can use the modular pipeline functions for iterative refinement.
 
+---
+
+## Pipeline Flow (What Actually Runs)
+
+1. **Step 1: Parse**  
+   Excel FRD → `parsers.parse_document()` → **brd_text** (raw FRD).
+
+2. **Step 2: Build final prompt**  
+   - **parse output** (brd_text)  
+   - **prompts.py** output: `INFORMATICA_SYSTEM_PROMPT` + `build_enhanced_prompt()`  
+   - **OOTB reference**: `load_person_fields_catalog()` reads **ootb_person_reference.txt**  
+   → Combined into **one final prompt** and saved as `outputs/[filename]_prompt.txt`.
+
+3. **Step 3: Give prompt to AI → execute → JSON**  
+   - **Input**: the file `outputs/[filename]_prompt.txt` (parse + prompts.py + OOTB).  
+   - **Action**: **AI reads that file**, follows the instructions, **produces the data model JSON**.  
+   - **Output**: JSON saved to `outputs/[filename]_response.json`.  
+   - **This only happens when the AI (Cursor) actually receives and executes that prompt.**  
+   Running `run_full_pipeline` does *not* run the AI; it only builds the prompt and prints instructions.
+
+4. **Step 4: Visualizations**  
+   JSON → Draw.io + HTML.
+
+**Check:** Is the AI really getting the prompt and producing the JSON? Only if you explicitly **read** `*_prompt.txt` and **output** the JSON (e.g. “Read `outputs/X_prompt.txt` and generate the data model JSON; save to `outputs/X_response.json`”). Otherwise Step 3 is skipped and any JSON comes from elsewhere (e.g. a script).
+
+---
+
 ## Modular Step Functions
 
 The pipeline is broken into **4 independent steps** that can be called separately:
@@ -27,20 +54,38 @@ from run_full_pipeline import step2_generate_prompt
 
 prompt_path = step2_generate_prompt(brd_text, outputs)
 ```
-**What it does:** Creates Cursor AI prompt from BRD text  
+**What it does:** Builds the **final prompt** = **parse output (FRD)** + **prompts.py** (system + user template) + **ootb_person_reference.txt**; saves to `outputs/[filename]_prompt.txt`.  
 **Returns:** Path to prompt file, or `None` if error
 
 ---
 
-### Step 3: Cursor AI Processing
-**Manual step** - Cursor needs to:
-1. Read the prompt file
-2. Generate JSON data model
-3. Save JSON to outputs folder
+### Step 3: Give prompt to AI → execute → JSON
+**Input:** `outputs/[filename]_prompt.txt` (already contains **parse output + prompts.py + OOTB reference**).
 
-**Cursor command:**
+**You must:** Give that prompt to the AI (Cursor). The AI reads it, executes it, and outputs **only** the data model JSON. Save that output to `outputs/[filename]_response.json`.
+
+**What the prompt tells the AI to do:**
+- Analyze the FRD (and use the OOTB catalog) to produce an Informatica MDM data model
+- **CRITICAL:** Scan ALL FRD requirements for explicit field names (e.g., "CWID", "PIDM", "Classification")
+- Check if explicitly mentioned fields exist in OOTB catalog
+- Include BOTH OOTB fields AND explicit custom fields (isCustom: true) in the data model
+- Return JSON with `metadata`, `reasoning` (entityDecisions, fieldDecisions), `dataModel` (entities, relationships)
+- Apply OOTB-first, traceability (requirementIds/sourceRequirements), no _meta fields
+- Output **only** raw JSON (no markdown, no code, no preamble)
+
+**Do not** use a Python script to build the JSON. The JSON must come from the **AI executing the prompt**.
+
+**Optional Pre-check:** Before generating JSON, you can run the custom field analyzer:
+```python
+python analyze_custom_fields.py "USF Requirements Document Cleaned.xlsx"
 ```
-Read outputs/[filename]_prompt.txt and generate the data model JSON following all instructions. Save it to outputs/[filename]_response.json
+This helps identify explicit custom fields that must be included.
+
+**Cursor command (so the AI actually receives and runs the prompt):**
+```
+Read outputs/[filename]_prompt.txt and generate the data model JSON following all instructions. 
+Ensure you scan the FRD for explicit custom fields (CWID, PIDM, Classification, source system IDs, etc.) 
+and include them with isCustom: true. Save it to outputs/[filename]_response.json
 ```
 
 ---
@@ -126,12 +171,10 @@ run_full_pipeline()
 ```
 
 ### When User Says: "Generate the data model from the prompt"
-```python
-# Cursor should:
-# 1. Read the prompt file
-# 2. Generate JSON following the prompt instructions
-# 3. Save to outputs/[filename]_response.json
-```
+The **AI** (Cursor) should:
+1. Read the prompt file (catalog + FRD + rules)
+2. **Analyze** the FRD and **generate** the JSON (no script — AI output only)
+3. Save the AI’s JSON to `outputs/[filename]_response.json`
 
 ### When User Says: "Create the visualizations"
 ```python
@@ -146,7 +189,7 @@ step4_generate_visualizations()
 ```
 outputs/
 ├── [filename]_prompt.txt          # Step 2 output
-├── [filename]_response.json      # Step 3 output (Cursor generates)
+├── [filename]_response.json      # Step 3 output (AI generates from prompt — not a script)
 ├── [filename]_data_model.drawio   # Step 4 output
 └── [filename]_data_model_report.html  # Step 4 output
 ```
@@ -160,6 +203,7 @@ outputs/
 3. **Auto-detection** - Functions can find files automatically
 4. **Error handling** - Functions return None on error
 5. **Iterative refinement** - User can regenerate any step independently
+6. **Step 3 = AI output only** - The JSON must be generated by the AI from the prompt. Do not use a Python script to build it.
 
 ---
 

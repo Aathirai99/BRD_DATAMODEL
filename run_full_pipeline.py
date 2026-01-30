@@ -168,26 +168,30 @@ def step2_generate_prompt(brd_text, outputs):
 
 def step3_cursor_instructions(outputs):
     """
-    STEP 3: Display instructions for Cursor AI processing
+    STEP 3: Give prompt to AI → execute → JSON
     
-    This is a manual step - Cursor AI needs to process the prompt.
-    This function just shows what to do next.
+    The prompt file = parse output (FRD) + prompts.py + ootb_person_reference.txt.
+    The AI must receive that prompt, execute it, and output JSON. This step only
+    prints instructions; it does not run the AI.
     
     Args:
         outputs: Output file paths dict
     
     Returns:
-        str: Instructions text
+        str: JSON output path
     """
     print("=" * 70)
-    print("STEP 3: Cursor AI Processing (Manual Step)")
+    print("STEP 3: Give prompt to AI → execute → JSON")
     print("=" * 70)
-    print("📋 Instructions for Cursor AI:")
-    print(f"   1. Read the prompt file: {outputs['prompt']}")
-    print(f"   2. Generate the data model JSON following the prompt")
-    print(f"   3. Save the JSON response to: {outputs['json']}")
+    print("📋 The prompt file contains: parse output (FRD) + prompts.py + OOTB reference.")
+    print("   The AI must receive this prompt, execute it, and output JSON.")
     print()
-    print("💡 To have Cursor do this automatically, say:")
+    print("   Give this prompt to Cursor AI:")
+    print(f"   1. Read: {outputs['prompt']}")
+    print(f"   2. Generate the data model JSON following the prompt")
+    print(f"   3. Save the JSON to: {outputs['json']}")
+    print()
+    print("💡 Say to Cursor:")
     print(f"   'Read {outputs['prompt']} and generate the data model JSON.'")
     print(f"   'Save the JSON to {outputs['json']}'")
     print()
